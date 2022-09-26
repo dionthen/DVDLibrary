@@ -1,35 +1,29 @@
 package com.dvdlibrary.dto;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 public class DVD {
-	private String dvdID;
 	private String title;
-	private String releaseDate;
+	private LocalDate releaseDate;
 	private String mpaaRating;
 	private String directorName;
 	private String studio;
-	private String userNote;
+	private String userRating;
 
-	public DVD(String dvdID) {
-		this.dvdID = dvdID;
-	}
-	
-	public String getDvdID() {
-		return dvdID;
+	public DVD(String title) {
+		this.title = title;
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getReleaseDate() {
+	public LocalDate getReleaseDate() {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(String releaseDate) {
+	public void setReleaseDate(LocalDate releaseDate) {
 		this.releaseDate = releaseDate;
 	}
 
@@ -57,11 +51,56 @@ public class DVD {
 		this.studio = studio;
 	}
 
-	public String getUserNote() {
-		return userNote;
+	public String getUserRating() {
+		return userRating;
 	}
 
-	public void setUserNote(String userNote) {
-		this.userNote = userNote;
+	public void setUserRating(String userRating) {
+		this.userRating = userRating;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 37 * hash + Objects.hashCode(this.title);
+		hash = 37 * hash + Objects.hashCode(this.releaseDate);
+		hash = 37 * hash + Objects.hashCode(this.mpaaRating);
+		hash = 37 * hash + Objects.hashCode(this.directorName);
+		hash = 37 * hash + Objects.hashCode(this.studio);
+		hash = 37 * hash + Objects.hashCode(this.userRating);
+		return hash;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final DVD other = (DVD) obj;
+		if (!Objects.equals(this.title, other.title)) {
+			return false;
+		}
+		if (!Objects.equals(this.releaseDate, other.releaseDate)) {
+			return false;
+		}
+		if (!Objects.equals(this.mpaaRating, other.mpaaRating)) {
+			return false;
+		}
+		if (!Objects.equals(this.directorName, other.directorName)) {
+			return false;
+		}
+		if (!Objects.equals(this.studio, other.studio)) {
+			return false;
+		}
+		if (!Objects.equals(this.userRating, other.userRating)) {
+			return false;
+		}
+		return true;
 	}
 }

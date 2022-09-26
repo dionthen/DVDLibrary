@@ -1,6 +1,8 @@
 package com.dvdlibrary.ui;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import com.dvdlibrary.dto.DVD;
 
@@ -26,97 +28,100 @@ public class DVDLibraryView {
 	// End of Menu code
 
 	// Start of 1. Allow the user to add a DVD to the collection
-	public DVD getNewDVDInfo() {
-		String dvdID = io.readString("Please enter DVD ID");
-		String title = io.readString("Please enter Title");
-		String releaseDate = io.readString("Please enter Release Date");
-		String mpaaRating = io.readString("Please enter MPAA Rating");
-		String directorName = io.readString("Please enter Director's Name");
-		String studio = io.readString("Please enter Studio");
-		String userNote = io.readString("Please enter User's Rating or Note");
-		DVD currentDVD = new DVD(dvdID);
-		currentDVD.setTitle(title);
-		currentDVD.setReleaseDate(releaseDate);
-		currentDVD.setMpaaRating(mpaaRating);
-		currentDVD.setDirectorName(directorName);
-		currentDVD.setStudio(studio);
-		currentDVD.setUserNote(userNote);
-		return currentDVD;
-	}
-
 	public void displayCreateDVDBanner() {
 		io.print("=== Create DVD ===");
 	}
+	
+	public DVD getNewDVDInfo() {
+		String title = io.readString("Please enter the DVD title");
+		LocalDate releaseDate = io.readDate("Please enter the DVD release date");
+		String MpaaRating = io.readString("Please enter the MPAA rating");
+		String directorName = io.readString("Please enter the director's name");
+		String studio = io.readString("Please enter the DVD studio");
+		String userRating = io.readString("Please enter your rating of the DVD");
+		// Instantiating a new DVD object using the title to satisfy the constructors
+		// requirements
+		DVD currentDvd = new DVD(title);
+		currentDvd.setReleaseDate(releaseDate);
+		currentDvd.setMpaaRating(MpaaRating);
+		currentDvd.setDirectorName(directorName);
+		currentDvd.setStudio(studio);
+		currentDvd.setUserRating(userRating);
+		return currentDvd;
+	}
 
 	public void displayCreateSuccessBanner() {
-		io.print("DVD successfully created.");
-		io.readString("Please hit enter to continue");
+		io.readString("DVD successfully created. Please hit enter to continue");
 	}
-	// End of 1. Allow the user to add a DVD to the collection
-	
-	// Start of 2. Allow the user to remove a DVD from the collection
+
+	//2. Allow the user to remove a DVD from the collection
 	public void displayRemoveDVDBanner() {
 		io.print("=== Remove DVD ===");
 	}
 
-	public void displayRemoveResult(DVD dvd) {
-		if (dvd != null) {
+	public void displayRemoveResult(DVD dvdRecord) {
+		if (dvdRecord != null) {
 			io.print("DVD successfully removed.");
 		} else {
 			io.print("No such DVD.");
 		}
 		io.readString("Please hit enter to continue.");
 	}
-	// End of 2. Allow the user to remove a DVD from the collection
 	
-	// Start of 3. Allow the user to edit the information for an existing DVD in the collection
-	public DVD getEdittedDVDInformation(DVD dvd) {
-		if (dvd != null) {
-			String title = io.readString("Please edit Title");
-			String releaseDate = io.readString("Please edit Release Date");
-			String mpaaRating = io.readString("Please edit MPAA Rating");
-			String directorName = io.readString("Please edit Director's Name");
-			String studio = io.readString("Please edit Studio");
-			String userNote = io.readString("Please edit User's Rating or Note");
-
-			dvd.setTitle(title);
-			dvd.setReleaseDate(releaseDate);
-			dvd.setMpaaRating(mpaaRating);
-			dvd.setDirectorName(directorName);
-			dvd.setStudio(studio);
-			dvd.setUserNote(userNote);
-			return dvd;
-		} else {
-			return null;
-		}
-	}
-
+	//3. Allow the user to edit the information for an existing DVD in the collection
 	public void displayEditDVDBanner() {
 		io.print("=== Edit DVD ===");
+
 	}
 
-	public void displayEditResult(DVD dvd) {
-		if (dvd != null) {
-			io.print("DVD successfully editted.");
-		} else {
-			io.print("No such DVD.");
-		}
-		io.readString("Please hit enter to continue.");
+	public int printEditMenuAndGetSelection() {
+		io.print("Which field do you want to change?");
+		io.print("Edit DVD menu");
+		io.print("1. Release date");
+		io.print("2. MPAA rating");
+		io.print("3. Director's name");
+		io.print("4. Studio name");
+		io.print("5. User rating");
+		io.print("6. Exit edit menu");
+		return io.readInt("Please select from the above choices.", 1, 6);
 	}
-	// End of 3. Allow the user to edit the information for an existing DVD in the collection
+	
+	public LocalDate getReleaseDate() {
+		return io.readDate("Please enter the new DVD release date.");
+	}
+
+	public String getMpaaRating() {
+		return io.readString("Please enter the new DVD MPAA rating.");
+	}
+
+	public String getDirectorName() {
+		return io.readString("Please enter the new director's name.");
+	}
+
+	public String getUserRating() {
+		return io.readString("Please enter the new user rating.");
+	}
+
+	public String getStudioName() {
+		return io.readString("Please enter the studio name.");
+	}
+	
+	public void displayEditResult() {
+		io.print("DVD Successfully edited.");
+	}
 
 	// Start of 4. Allow the user to list the DVDs in the collection
 	public void displayDVDList(List<DVD> dvdList) {
 		if (!dvdList.isEmpty()) {
+			String dvdHeadings = String.format("%25s | %12s | %4s | %17s | %7s | %25s", "Title", "Release Date", "MPAA",
+					"Director Name", "Studio", "Rating");
+			io.print(dvdHeadings);
+			io.print(
+					"-----------------------------------------------------------------------------------------------------------------");
 			for (DVD currentDVD : dvdList) {
-				String dvdInfo = String.format("#%s : %s %s %s %s %s %s", 
-						currentDVD.getDvdID(), 
-						currentDVD.getTitle(),
-						currentDVD.getReleaseDate(), 
-						currentDVD.getMpaaRating(), 
-						currentDVD.getDirectorName(),
-						currentDVD.getStudio(), 
-						currentDVD.getUserNote());
+				String dvdInfo = String.format("%25s | %12s | %4s | %17s | %7s | %25s", currentDVD.getTitle(),
+						currentDVD.getReleaseDate(), currentDVD.getMpaaRating(), currentDVD.getDirectorName(),
+						currentDVD.getStudio(),currentDVD.getUserRating());
 				io.print(dvdInfo);
 			}
 		} else {
@@ -126,60 +131,85 @@ public class DVDLibraryView {
 		io.readString("Please hit enter to continue.");
 	}
 
-	public void displayDisplayAllBanner() {
-		io.print("=== Display All DVDs ===");
+	public void displayDVDListBanner() {
+		io.print("=== Display all DVDs ===");
 	}
 
 	public void displayDisplayDVDBanner() {
 		io.print("=== Display DVD ===");
 	}
-	// End of 4. Allow the user to list the DVDs in the collection
 
-	//Start of 5. Allow the user to display the information for a particular DVD
+	//5. Allow the user to display the information for a particular DVD
+	public void displayFindDVDsBanner() {
+		io.print("=== Find DVDS ===");
+	}
+
+	public int printFindMenuAndGetSelection() {
+		io.print("Find DVD menu");
+		io.print("1. Find all movies released in the last N years");
+		io.print("2. Find all movies by MPAA rating");
+		io.print("3. Find all movies by director");
+		io.print("4. Find all movies by Studio");
+		io.print("5. Exit find DVD menu");
+		return io.readInt("Please select from the above choices.", 1, 5);
+	}
+
+	public int getNYears() {
+		return io.readInt("How many years? (N)");
+	}
+
+	public String displayDVDs(Map<String, DVD> filteredDvds) {
+		if (filteredDvds.isEmpty()) {
+			io.print("No DVDs to display");
+		} else {
+			String dvdHeadings = String.format("%25s | %12s | %4s | %17s | %7s | %25s", "Title", "Release Date", "MPAA",
+					"Director Name", "Studio", "Rating");
+			io.print(dvdHeadings);
+			io.print(
+					"-----------------------------------------------------------------------------------------------------------------");
+			filteredDvds.values().stream()
+					.forEach((Dvd) -> io.print(
+							String.format("%25s | %12s | %4s | %17s | %7s | %25s", Dvd.getTitle(), Dvd.getReleaseDate(),
+									Dvd.getMpaaRating(), Dvd.getDirectorName(), Dvd.getStudio(), Dvd.getUserRating())));
+		}
+		return io.readString("Please hit enter to continue");
+
+	}
+	
+	//6. Allow the user to search for a DVD by title
+	public String getDVDTitleChoice() {
+		return io.readString("Please enter the DVD title.");
+	}
+
 	public void displayDVD(DVD dvd) {
 		if (dvd != null) {
-			io.print("DVD ID: " + dvd.getDvdID());
+			io.print("=== " + dvd.getTitle() + " Summary ===");
 			io.print("Title: " + dvd.getTitle());
-			io.print("Release Date: " + dvd.getReleaseDate());
-			io.print("MPAA Rating: " + dvd.getMpaaRating());
-			io.print("Director's Name: " + dvd.getDirectorName());
+			io.print("Release date: " + dvd.getReleaseDate());
+			io.print("MPAA rating: " + dvd.getMpaaRating());
+			io.print("Director's name: " + dvd.getDirectorName());
 			io.print("Studio: " + dvd.getStudio());
-			io.print("User's Rating/Note: " + dvd.getUserNote());
-			io.print("");
+			io.print("User rating: " + dvd.getUserRating());
 		} else {
-			io.print("No such DVD.");
+			io.print("No such DVD");
 		}
 		io.readString("Please hit enter to continue.");
 	}
-	//End of 5. Allow the user to display the information for a particular DVD
 
-    //Start of 6. Allow the user to search for a DVD by title
-	public void displayFindDVDByTitleBanner() {
-		io.print("=== Find DVD By Title ===");
-	}
-		
-	public String getDVDTitleChoice() {
-		return io.readString("Please enter the DVD Title.");
-	}
-	// Reuse displayDVD(DVD) from 5.
-
-    //End of 6. Allow the user to search for a DVD by title
-
-	
 	public void displayExitBanner() {
-		io.print("Good Bye!!!");
+		io.print("Good bye!");
 	}
 
 	public void displayUnknownCommandBanner() {
-		io.print("Unknown Command!!!");
+		io.print("Unknown command!");
+	}	
+
+	public void displayNullDVD() {
+		io.print("No such DVD");
 	}
 
 	public void displayErrorMessage(String errorMsg) {
 		io.print("=== ERROR ===");
 		io.print(errorMsg);
 	}
-
-	public String getDVDIDChoice() {
-		return io.readString("Please enter the DVD ID.");
-	}	
 }

@@ -10,10 +10,10 @@ import com.dvdlibrary.ui.UserIOConsoleImpl;
 public class App {
 
 	public static void main(String[] args) {
-		UserIO myIo = new UserIOConsoleImpl();
-		DVDLibraryView myView = new DVDLibraryView(myIo);
-		DVDLibraryDao myDao = new DVDLibraryDaoFileImpl();
-		DVDLibraryController controller = new DVDLibraryController(myDao, myView);
-		controller.run();
+		 UserIO myIo = new UserIOConsoleImpl();
+         DVDLibraryView myView = new DVDLibraryView(myIo);
+         DVDLibraryDao myDao = new DVDLibraryDaoFileImpl();
+         DVDLibraryController controller = new DVDLibraryController(myDao, myView);
+         controller.run();  
 	}
 }
